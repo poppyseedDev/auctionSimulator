@@ -14,7 +14,7 @@ interface BidDialogProps {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   currentPrice: number
-  availableTokens: number
+  availableTokens: number | string
   bidAmount: string
   onBidAmountChange: (value: string) => void
   onBidConfirm: () => void

@@ -1,7 +1,7 @@
 import { ArrowDown } from "lucide-react"
 
 interface AuctionStatsProps {
-    availableTokens: number
+    availableTokens: number | string
     initialTokens: number
     currentPrice: number
     timeUntilDrop: number
@@ -20,7 +20,7 @@ interface AuctionStatsProps {
           {availableTokens} / {initialTokens}
         </div>
         <div className="text-sm text-muted-foreground">
-          {((availableTokens / initialTokens) * 100).toFixed(1)}% remaining
+          {typeof availableTokens === 'string' ? '??' : ((availableTokens / initialTokens) * 100).toFixed(1)}% remaining
         </div>
       </div>
       <div className="text-center space-y-2">

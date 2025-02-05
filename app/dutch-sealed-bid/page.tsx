@@ -16,9 +16,9 @@ interface PricePoint {
 
 interface Bid {
   id: number
-  tokens: number
+  tokens: number | string
   price: number
-  total: number
+  total: number | string
   timestamp: string
 }
 
@@ -30,6 +30,7 @@ export default function DutchAuctionSealedBid() {
   const [priceHistory, setPriceHistory] = useState<PricePoint[]>([{ time: 0, price: 1000 }])
   const [elapsedTime, setElapsedTime] = useState(0)
   const [availableTokens, setAvailableTokens] = useState(1000)
+  const [displayedAvailableTokens, setDisplayedAvailableTokens] = useState<string | number>(1000)
   const [bids, setBids] = useState<Bid[]>([])
   const [bidAmount, setBidAmount] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -48,6 +49,7 @@ export default function DutchAuctionSealedBid() {
     setPriceHistory([{ time: 0, price: INITIAL_PRICE }])
     setElapsedTime(0)
     setAvailableTokens(INITIAL_TOKENS)
+    setDisplayedAvailableTokens(INITIAL_TOKENS)
     setBids([])
   }, [])
 
@@ -104,14 +106,15 @@ export default function DutchAuctionSealedBid() {
 
     const newBid: Bid = {
       id: Date.now(),
-      tokens,
+      tokens: "??",
       price: currentPrice,
-      total: tokens * currentPrice,
+      total: "??",
       timestamp: new Date().toLocaleTimeString(),
     }
 
     setBids((prev) => [newBid, ...prev])
     setAvailableTokens((prev) => prev - tokens)
+    setDisplayedAvailableTokens("??")
     setBidAmount("")
     setIsDialogOpen(false)
   }
@@ -124,7 +127,7 @@ export default function DutchAuctionSealedBid() {
         </CardHeader>
         <CardContent className="space-y-8">
           <AuctionStats
-            availableTokens={availableTokens}
+            availableTokens={displayedAvailableTokens}
             initialTokens={INITIAL_TOKENS}
             currentPrice={currentPrice}
             timeUntilDrop={timeUntilDrop}
@@ -162,7 +165,7 @@ export default function DutchAuctionSealedBid() {
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         currentPrice={currentPrice}
-        availableTokens={availableTokens}
+        availableTokens={displayedAvailableTokens}
         bidAmount={bidAmount}
         onBidAmountChange={setBidAmount}
         onBidConfirm={handleBid}
