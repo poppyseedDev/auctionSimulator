@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { PriceHistoryChart } from "@/components/PriceHistoryChart"
-import { BidHistory } from "@/components/BidHistory"
+import { BidHistory, Bid } from "@/components/BidHistory"
 import { AuctionStats } from "@/components/AuctionStats"
 import { AuctionControls } from "@/components/AuctionControls"
 import { BidDialog } from "@/components/BidDialog"
@@ -12,14 +12,6 @@ import { BidDialog } from "@/components/BidDialog"
 interface PricePoint {
   time: number
   price: number
-}
-
-interface Bid {
-  id: number
-  tokens: number | string
-  price: number
-  total: number | string
-  timestamp: string
 }
 
 export default function DutchAuctionSealedBid() {

@@ -1,13 +1,13 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-interface Bid {
-  id: number
-  tokens: number
-  price: number
-  total: number
-  timestamp: string
-}
+export interface Bid {
+    id: number
+    tokens: number | string
+    price: number
+    total: number | string
+    timestamp: string
+  }
 
 interface BidHistoryProps {
   bids: Bid[]

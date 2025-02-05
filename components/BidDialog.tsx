@@ -58,7 +58,7 @@ export function BidDialog({
           )}
         </div>
         <DialogFooter>
-          <Button onClick={onBidConfirm} disabled={!bidAmount || Number(bidAmount) > availableTokens}>
+          <Button onClick={onBidConfirm} disabled={!bidAmount || Number(bidAmount) > Number(availableTokens)}>
             Confirm Bid
           </Button>
         </DialogFooter>
