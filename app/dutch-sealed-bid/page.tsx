@@ -22,7 +22,7 @@ interface Bid {
   timestamp: string
 }
 
-export default function DutchAuction() {
+export default function DutchAuctionSealedBid() {
   const [currentPrice, setCurrentPrice] = useState(1000)
   const [isRunning, setIsRunning] = useState(false)
   const [timeUntilDrop, setTimeUntilDrop] = useState(10)
