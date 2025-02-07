@@ -4,8 +4,8 @@ interface AuctionStatsProps {
     availableTokens: number | string
     initialTokens: number
     currentPrice: number
-    timeUntilDrop: number
-    interval: number
+    timeUntilDrop?: number
+    interval?: number
     minPrice: number
     priceDrop: number
   }

@@ -23,6 +23,12 @@ export default function Header() {
             Dutch auctions with sealed bids
           </Link>
           <Link
+            href="/uniform-price-auction"
+            className={pathname === "/uniform-price-auction" ? "font-bold" : ""}
+          >
+            Reverse Auction
+          </Link>
+          <Link
             href="/sealed-bid"
             className={pathname === "/sealed-bid" ? "font-bold" : ""}
           >

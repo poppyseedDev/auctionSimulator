@@ -8,6 +8,7 @@ import { BidHistory, Bid } from "@/components/BidHistory"
 import { AuctionStats } from "@/components/AuctionStats"
 import { AuctionControls } from "@/components/AuctionControls"
 import { BidDialog } from "@/components/BidDialog"
+import { formatTime } from "@/lib/utils"
 
 interface PricePoint {
   time: number
@@ -82,12 +83,6 @@ export default function DutchAuctionSealedBid() {
 
   const toggleAuction = () => {
     setIsRunning((prev) => !prev)
-  }
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, "0")}`
   }
 
   const handleBid = () => {
