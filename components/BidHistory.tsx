@@ -1,16 +1,23 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export interface Bid {
-    id: number
-    tokens: number | string
-    price: number
-    total: number | string
-    timestamp: string
-  }
+  id: number;
+  tokens: number | string;
+  price: number;
+  total: number | string;
+  timestamp: string;
+}
 
 interface BidHistoryProps {
-  bids: Bid[]
+  bids: Bid[];
 }
 
 export function BidHistory({ bids }: BidHistoryProps) {
@@ -37,12 +44,17 @@ export function BidHistory({ bids }: BidHistoryProps) {
                     <TableCell>{bid.timestamp}</TableCell>
                     <TableCell>{bid.tokens}</TableCell>
                     <TableCell>${bid.price}</TableCell>
-                    <TableCell className="text-right">${bid.total.toLocaleString()}</TableCell>
+                    <TableCell className="text-right">
+                      ${bid.total.toLocaleString()}
+                    </TableCell>
                   </TableRow>
                 ))}
                 {bids.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-muted-foreground">
+                    <TableCell
+                      colSpan={4}
+                      className="text-center text-muted-foreground"
+                    >
                       No bids yet
                     </TableCell>
                   </TableRow>
@@ -53,5 +65,5 @@ export function BidHistory({ bids }: BidHistoryProps) {
         </div>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

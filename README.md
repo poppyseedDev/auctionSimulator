@@ -1,6 +1,6 @@
 # Auction Simulator
 
-An auction simulation system built with Next.js that allows users to play around with different auction mechanisms. 
+An auction simulation system built with Next.js that allows users to play around with different auction mechanisms.
 
 ## Features
 
@@ -12,17 +12,20 @@ An auction simulation system built with Next.js that allows users to play around
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/poppyseedDev/auctionSimulator.git
 ```
 
 2. Install dependencies:
+
 ```bash
 cd auctionSimulator
 pnpm install
 ```
 
 4. Start the development server:
+
 ```bash
 pnpm run dev
 ```
@@ -40,4 +43,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 MIT
-

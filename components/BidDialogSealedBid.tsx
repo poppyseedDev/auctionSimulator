@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,19 +6,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface BidDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  availableTokens: number | string
-  bidAmount: string
-  bidPrice: string
-  onBidAmountChange: (value: string) => void
-  onBidPriceChange: (value: string) => void
-  onBidConfirm: () => void
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  availableTokens: number | string;
+  bidAmount: string;
+  bidPrice: string;
+  onBidAmountChange: (value: string) => void;
+  onBidPriceChange: (value: string) => void;
+  onBidConfirm: () => void;
 }
 
 export function BidDialogSealedBid({
@@ -67,16 +67,17 @@ export function BidDialogSealedBid({
           </div>
           {bidAmount && bidPrice && (
             <div className="text-sm text-muted-foreground">
-              Total bid: ${(Number(bidAmount) * Number(bidPrice)).toLocaleString()}
+              Total bid: $
+              {(Number(bidAmount) * Number(bidPrice)).toLocaleString()}
             </div>
           )}
         </div>
         <DialogFooter>
-          <Button 
-            onClick={onBidConfirm} 
+          <Button
+            onClick={onBidConfirm}
             disabled={
-              !bidAmount || 
-              !bidPrice || 
+              !bidAmount ||
+              !bidPrice ||
               Number(bidAmount) > Number(availableTokens) ||
               Number(bidPrice) <= 0
             }
@@ -86,5 +87,5 @@ export function BidDialogSealedBid({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-} 
+  );
+}

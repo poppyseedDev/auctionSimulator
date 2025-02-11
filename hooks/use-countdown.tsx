@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react';
 
 interface TimeLeft {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-  total: number
-  isExpired: boolean
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  total: number;
+  isExpired: boolean;
 }
 
 // Move calculateTimeLeft outside the hook
 const calculateTimeLeft = (targetDate: Date): TimeLeft => {
-  const now = new Date().getTime()
-  const distance = targetDate.getTime() - now
+  const now = new Date().getTime();
+  const distance = targetDate.getTime() - now;
 
   // Check if the target date is in the past
   if (distance < 0) {
@@ -25,7 +25,7 @@ const calculateTimeLeft = (targetDate: Date): TimeLeft => {
       seconds: 0,
       total: 0,
       isExpired: true,
-    }
+    };
   }
 
   return {
@@ -35,28 +35,29 @@ const calculateTimeLeft = (targetDate: Date): TimeLeft => {
     seconds: Math.floor((distance % (1000 * 60)) / 1000),
     total: distance,
     isExpired: false,
-  }
-}
+  };
+};
 
 export function useCountdown(targetDate: Date): TimeLeft {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calculateTimeLeft(targetDate))
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
+    calculateTimeLeft(targetDate)
+  );
 
   useEffect(() => {
     // Update every second
     const timer = setInterval(() => {
-      const newTimeLeft = calculateTimeLeft(targetDate)
-      setTimeLeft(newTimeLeft)
+      const newTimeLeft = calculateTimeLeft(targetDate);
+      setTimeLeft(newTimeLeft);
 
       // Clear interval when countdown expires
       if (newTimeLeft.isExpired) {
-        clearInterval(timer)
+        clearInterval(timer);
       }
-    }, 1000)
+    }, 1000);
 
     // Cleanup on unmount
-    return () => clearInterval(timer)
-  }, [targetDate]) // Only depend on targetDate
+    return () => clearInterval(timer);
+  }, [targetDate]); // Only depend on targetDate
 
-  return timeLeft
+  return timeLeft;
 }
-
