@@ -2,13 +2,15 @@
 
 import { createContext, useContext, useState } from 'react';
 
-interface Settings {
+export interface Settings {
   auctionType: string;
   initialPrice: number;
   minPrice: number;
-  priceDrop: number;
+  readonly priceDrop: number;
   interval: number;
   initialTokens: number;
+  sealedBid: boolean;
+  totalTime: number;
 }
 
 interface SettingsContextType {
@@ -21,9 +23,13 @@ const defaultSettings: Settings = {
   auctionType: 'dutch',
   initialPrice: 1000,
   minPrice: 100,
-  priceDrop: 50,
   interval: 10,
   initialTokens: 1000,
+  sealedBid: false,
+  totalTime: 5, // in min
+  get priceDrop() {
+    return (this.initialPrice - this.minPrice) / (this.totalTime * 60 / this.interval);
+  }
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(

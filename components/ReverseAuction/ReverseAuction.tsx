@@ -5,24 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { useCountdown } from '@/hooks/use-countdown';
 import { AuctionBidHistory } from '@/components/AuctionBidHistory';
 import { AuctionPriceChart } from '@/components/AuctionPriceChart';
 import { Bid } from '@/components/AuctionPriceChart';
+import { Settings } from '@/contexts/settigns-context';
 
-const TOTAL_TOKENS = 1000;
-const AUCTION_DURATION = 5 * 60 * 1000; // 5 minutes
-const SEALED_BID = true;
 
-export default function TokenAuction() {
+export default function ReverseAuction({ settings }: { settings: Settings}) {
+  const TOTAL_TOKENS = settings.initialTokens;
+  const AUCTION_DURATION = settings.totalTime * 60 * 1000;
+  const SEALED_BID = settings.sealedBid;
+
   const [endTime] = useState(
     () => new Date(new Date().getTime() + AUCTION_DURATION)
   );

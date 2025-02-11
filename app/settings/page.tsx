@@ -30,7 +30,11 @@ export default function Settings() {
     };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    updateSettings({ auctionType: e.target.value });
+    const auctionType = e.target.value;
+    updateSettings({
+      auctionType,
+      sealedBid: auctionType.includes('sealed')
+    });
   };
 
   return (
@@ -112,16 +116,16 @@ export default function Settings() {
                 <Separator />
 
                 <div className="grid gap-2">
-                  <Label htmlFor="priceDrop">Price Drop Amount ($)</Label>
+                  <Label htmlFor="totalTime">Total Auction Time (minutes)</Label>
                   <Input
-                    id="priceDrop"
+                    id="totalTime"
                     type="number"
-                    value={settings.priceDrop}
-                    onChange={handleChange('priceDrop')}
+                    value={settings.totalTime}
+                    onChange={handleChange('totalTime')}
                     min={1}
                   />
                   <p className="text-sm text-muted-foreground">
-                    How much the price decreases each interval
+                    Total duration of the auction
                   </p>
                 </div>
 
@@ -136,6 +140,17 @@ export default function Settings() {
                   />
                   <p className="text-sm text-muted-foreground">
                     Time between price drops
+                  </p>
+                </div>
+
+                <div className="grid gap-2">
+                  <Label>Price Drop per Interval</Label>
+                  <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+                    ${((settings.initialPrice - settings.minPrice) / 
+                      (settings.totalTime * 60 / settings.interval)).toFixed(2)}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Amount the price will decrease every {settings.interval} seconds
                   </p>
                 </div>
 
