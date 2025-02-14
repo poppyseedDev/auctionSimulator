@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-interface TimeLeft {
+export interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
