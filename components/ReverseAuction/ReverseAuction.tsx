@@ -151,8 +151,11 @@ export default function ReverseAuction({ settings, user }: { settings: Settings;
         remainingTokens={remainingTokens}
         totalTokens={TOTAL_TOKENS}
       />
-      <AuctionPriceChart bids={bids} clearingPrice={clearingPrice} />
-      <AuctionBidHistory bids={processedBids} />
+
+      {(timeLeft.isExpired || !SEALED_BID) && (
+        <AuctionPriceChart bids={bids} clearingPrice={clearingPrice} />
+      )}
+      <AuctionBidHistory bids={processedBids} hideBool={timeLeft.isExpired || !SEALED_BID} />
     </div>
   );
 }
