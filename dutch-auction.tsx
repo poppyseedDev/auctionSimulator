@@ -1,44 +1,44 @@
-"use client"
+'use client';
 
-import { useCallback, useEffect, useState } from "react"
-import { ArrowDown, Pause, Play, RotateCcw } from "lucide-react"
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { useCallback, useEffect, useState } from 'react';
+import { ArrowDown, Pause, Play, RotateCcw } from 'lucide-react';
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
 
 interface PricePoint {
-  time: number
-  price: number
+  time: number;
+  price: number;
 }
 
 export default function DutchAuction() {
-  const [currentPrice, setCurrentPrice] = useState(1000)
-  const [isRunning, setIsRunning] = useState(false)
-  const [timeUntilDrop, setTimeUntilDrop] = useState(10)
-  const [progress, setProgress] = useState(100)
-  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([{ time: 0, price: 1000 }])
-  const [elapsedTime, setElapsedTime] = useState(0)
+  const [currentPrice, setCurrentPrice] = useState(1000);
+  const [isRunning, setIsRunning] = useState(false);
+  const [timeUntilDrop, setTimeUntilDrop] = useState(10);
+  const [progress, setProgress] = useState(100);
+  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([{ time: 0, price: 1000 }]);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
-  const PRICE_DROP = 50 // Amount to decrease price by
-  const INTERVAL = 10 // Seconds between price drops
-  const MIN_PRICE = 100 // Minimum price
-  const INITIAL_PRICE = 1000 // Starting price
+  const PRICE_DROP = 50; // Amount to decrease price by
+  const INTERVAL = 10; // Seconds between price drops
+  const MIN_PRICE = 100; // Minimum price
+  const INITIAL_PRICE = 1000; // Starting price
 
   const resetAuction = useCallback(() => {
-    setCurrentPrice(INITIAL_PRICE)
-    setTimeUntilDrop(INTERVAL)
-    setIsRunning(false)
-    setProgress(100)
-    setPriceHistory([{ time: 0, price: INITIAL_PRICE }])
-    setElapsedTime(0)
-  }, [])
+    setCurrentPrice(INITIAL_PRICE);
+    setTimeUntilDrop(INTERVAL);
+    setIsRunning(false);
+    setProgress(100);
+    setPriceHistory([{ time: 0, price: INITIAL_PRICE }]);
+    setElapsedTime(0);
+  }, []);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
-    let elapsedTimer: NodeJS.Timeout
+    let timer: NodeJS.Timeout;
+    let elapsedTimer: NodeJS.Timeout;
 
     if (isRunning && currentPrice > MIN_PRICE) {
       // Timer for price drops
@@ -46,42 +46,45 @@ export default function DutchAuction() {
         setTimeUntilDrop((prev) => {
           if (prev <= 1) {
             setCurrentPrice((prevPrice) => {
-              const newPrice = Math.max(prevPrice - PRICE_DROP, MIN_PRICE)
-              setPriceHistory((prev) => [...prev, { time: elapsedTime + INTERVAL, price: newPrice }])
-              return newPrice
-            })
-            return INTERVAL
+              const newPrice = Math.max(prevPrice - PRICE_DROP, MIN_PRICE);
+              setPriceHistory((prev) => [
+                ...prev,
+                { time: elapsedTime + INTERVAL, price: newPrice },
+              ]);
+              return newPrice;
+            });
+            return INTERVAL;
           }
-          return prev - 1
-        })
+          return prev - 1;
+        });
 
         setProgress((prev) => {
-          if (prev <= 0) return 100
-          return prev - 100 / INTERVAL
-        })
-      }, 1000)
+          if (prev <= 0) return 100;
+          return prev - 100 / INTERVAL;
+        });
+      }, 1000);
 
       // Timer for elapsed time
       elapsedTimer = setInterval(() => {
-        setElapsedTime((prev) => prev + 1)
-      }, 1000)
+        setElapsedTime((prev) => prev + 1);
+      }, 1000);
     }
 
     return () => {
-      clearInterval(timer)
-      clearInterval(elapsedTimer)
-    }
-  }, [isRunning, currentPrice, elapsedTime])
+      clearInterval(timer);
+      clearInterval(elapsedTimer);
+    };
+  }, [isRunning, currentPrice, elapsedTime]);
 
   const toggleAuction = () => {
-    setIsRunning((prev) => !prev)
-  }
+    setIsRunning((prev) => !prev);
+  };
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, "0")}`
-  }
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -94,7 +97,7 @@ export default function DutchAuction() {
             <div className="text-sm text-muted-foreground">Current Price</div>
             <div
               className={`text-5xl font-bold transition-all duration-300 ${
-                timeUntilDrop === INTERVAL ? "scale-110 text-primary" : ""
+                timeUntilDrop === INTERVAL ? 'scale-110 text-primary' : ''
               }`}
             >
               ${currentPrice.toLocaleString()}
@@ -127,8 +130,8 @@ export default function DutchAuction() {
               <ChartContainer
                 config={{
                   price: {
-                    label: "Price ($)",
-                    color: "hsl(var(--primary))",
+                    label: 'Price ($)',
+                    color: 'hsl(var(--primary))',
                   },
                 }}
               >
@@ -137,11 +140,19 @@ export default function DutchAuction() {
                     <XAxis
                       dataKey="time"
                       tickFormatter={formatTime}
-                      label={{ value: "Time Elapsed (min:sec)", position: "bottom", offset: 0 }}
+                      label={{
+                        value: 'Time Elapsed (min:sec)',
+                        position: 'bottom',
+                        offset: 0,
+                      }}
                     />
                     <YAxis
                       domain={[MIN_PRICE - 50, INITIAL_PRICE + 50]}
-                      label={{ value: "Price ($)", angle: -90, position: "left" }}
+                      label={{
+                        value: 'Price ($)',
+                        angle: -90,
+                        position: 'left',
+                      }}
                     />
                     <ChartTooltip
                       content={({ active, payload }) => {
@@ -155,12 +166,18 @@ export default function DutchAuction() {
                                 <div>${payload[0].payload.price}</div>
                               </div>
                             </div>
-                          )
+                          );
                         }
-                        return null
+                        return null;
                       }}
                     />
-                    <Line type="stepAfter" dataKey="price" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                    <Line
+                      type="stepAfter"
+                      dataKey="price"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={2}
+                      dot={false}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -170,7 +187,7 @@ export default function DutchAuction() {
         <CardFooter className="flex justify-center gap-4">
           <Button onClick={toggleAuction} disabled={currentPrice <= MIN_PRICE}>
             {isRunning ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
-            {isRunning ? "Pause" : "Start"}
+            {isRunning ? 'Pause' : 'Start'}
           </Button>
           <Button variant="outline" onClick={resetAuction}>
             <RotateCcw className="h-4 w-4 mr-2" />
@@ -179,6 +196,5 @@ export default function DutchAuction() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
-

@@ -1,19 +1,28 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { User } from '@/contexts/auth-context';
 
 export interface Bid {
-    id: number
-    tokens: number | string
-    price: number
-    total: number | string
-    timestamp: string
-  }
-
-interface BidHistoryProps {
-  bids: Bid[]
+  id: number;
+  tokens: number | string;
+  price: number;
+  total: number | string;
+  timestamp: string;
 }
 
-export function BidHistory({ bids }: BidHistoryProps) {
+interface BidHistoryProps {
+  bids: Bid[];
+  user: User;
+}
+
+export function BidHistory({ bids, user }: BidHistoryProps) {
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
@@ -25,6 +34,7 @@ export function BidHistory({ bids }: BidHistoryProps) {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Bidder</TableHead>
                   <TableHead>Time</TableHead>
                   <TableHead>Tokens</TableHead>
                   <TableHead>Price per Token</TableHead>
@@ -34,6 +44,7 @@ export function BidHistory({ bids }: BidHistoryProps) {
               <TableBody>
                 {bids.map((bid) => (
                   <TableRow key={bid.id}>
+                    <TableCell>{user.name}</TableCell>
                     <TableCell>{bid.timestamp}</TableCell>
                     <TableCell>{bid.tokens}</TableCell>
                     <TableCell>${bid.price}</TableCell>
@@ -53,5 +64,5 @@ export function BidHistory({ bids }: BidHistoryProps) {
         </div>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

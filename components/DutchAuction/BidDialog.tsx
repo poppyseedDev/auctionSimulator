@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,18 +6,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface BidDialogProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  currentPrice: number
-  availableTokens: number | string
-  bidAmount: string
-  onBidAmountChange: (value: string) => void
-  onBidConfirm: () => void
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentPrice: number;
+  availableTokens: number | string;
+  bidAmount: string;
+  onBidAmountChange: (value: string) => void;
+  onBidConfirm: () => void;
 }
 
 export function BidDialog({
@@ -58,11 +58,14 @@ export function BidDialog({
           )}
         </div>
         <DialogFooter>
-          <Button onClick={onBidConfirm} disabled={!bidAmount || Number(bidAmount) > Number(availableTokens)}>
+          <Button
+            onClick={onBidConfirm}
+            disabled={!bidAmount || Number(bidAmount) > Number(availableTokens)}
+          >
             Confirm Bid
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-} 
+  );
+}
