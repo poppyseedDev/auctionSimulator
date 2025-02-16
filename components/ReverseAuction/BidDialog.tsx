@@ -33,7 +33,7 @@ export function BidDialog({
   onBidConfirm,
   initialPrice,
   remainingTokens,
-  totalTokens
+  totalTokens,
 }: BidDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -41,7 +41,8 @@ export function BidDialog({
         <DialogHeader>
           <DialogTitle>Place Your Bid</DialogTitle>
           <DialogDescription>
-            Minimum price is ${initialPrice}. Unsold tokens: {remainingTokens}. Total tokens: {totalTokens}
+            Minimum price is ${initialPrice}. Unsold tokens: {remainingTokens}. Total tokens:{' '}
+            {totalTokens}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -74,9 +75,7 @@ export function BidDialog({
               step="0.01"
             />
             {Number(bidAmount) <= initialPrice && bidAmount !== '' && (
-              <p className="text-sm text-destructive">
-                Price must be more than ${initialPrice}
-              </p>
+              <p className="text-sm text-destructive">Price must be more than ${initialPrice}</p>
             )}
           </div>
           {tokenAmount && bidAmount && (

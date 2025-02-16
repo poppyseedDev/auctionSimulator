@@ -16,14 +16,10 @@ export function AuctionEndAlert({
   return (
     <Alert>
       <AlertDescription className="space-y-2">
-        <p>
-          This auction has ended. {totalTokens - remainingTokens} tokens were sold.
-        </p>
-        <p className="font-semibold">
-          Final clearing price: ${clearingPrice.toFixed(2)}
-        </p>
+        <p>This auction has ended. {totalTokens - remainingTokens} tokens were sold.</p>
+        <p className="font-semibold">Final clearing price: ${clearingPrice.toFixed(2)}</p>
         <p>Total auction proceeds: ${totalProceeds.toFixed(2)}</p>
       </AlertDescription>
     </Alert>
   );
-} 
+}

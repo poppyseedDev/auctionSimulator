@@ -44,4 +44,4 @@ export const calculateCustomPrice = (
   }
 
   return Math.max(currentPrice, minPrice);
-}; 
+};

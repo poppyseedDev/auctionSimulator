@@ -44,9 +44,7 @@ const defaultSettings: Settings = {
   ],
 };
 
-const SettingsContext = createContext<SettingsContextType | undefined>(
-  undefined
-);
+const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
@@ -54,7 +52,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const calculatePriceDrop = (currentSettings: Settings) => {
     const totalIntervals = (currentSettings.totalTime * 60) / currentSettings.interval;
     if (totalIntervals === 0) return 0;
-    
+
     const priceDrop = (currentSettings.initialPrice - currentSettings.minPrice) / totalIntervals;
     return isFinite(priceDrop) ? Number(priceDrop.toFixed(2)) : 0;
   };
@@ -63,10 +61,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setSettings((prev) => {
       const updatedSettings = { ...prev, ...newSettings };
       // Recalculate priceDrop whenever relevant settings change
-      if ('initialPrice' in newSettings || 'minPrice' in newSettings || 'totalTime' in newSettings) {
+      if (
+        'initialPrice' in newSettings ||
+        'minPrice' in newSettings ||
+        'totalTime' in newSettings
+      ) {
         return {
           ...updatedSettings,
-          priceDrop: calculatePriceDrop(updatedSettings)
+          priceDrop: calculatePriceDrop(updatedSettings),
         };
       }
       return updatedSettings;
@@ -78,9 +80,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <SettingsContext.Provider
-      value={{ settings, updateSettings, resetToDefaults }}
-    >
+    <SettingsContext.Provider value={{ settings, updateSettings, resetToDefaults }}>
       {children}
     </SettingsContext.Provider>
   );

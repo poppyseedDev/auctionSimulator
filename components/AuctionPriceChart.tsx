@@ -11,15 +11,7 @@ import {
 } from 'chart.js';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export interface Bid {
   amount: number;
@@ -31,10 +23,7 @@ interface AuctionPriceChartProps {
   clearingPrice: number;
 }
 
-export function AuctionPriceChart({
-  bids,
-  clearingPrice,
-}: AuctionPriceChartProps) {
+export function AuctionPriceChart({ bids, clearingPrice }: AuctionPriceChartProps) {
   const chartData = {
     labels: bids.map((bid) => bid.timestamp.toLocaleTimeString()),
     datasets: [

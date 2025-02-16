@@ -45,9 +45,7 @@ export function AuctionStats({
         {currentPrice > minPrice && (
           <div className="flex items-center justify-center gap-2 text-muted-foreground">
             <ArrowDown className="h-4 w-4" />
-            <span>
-              Next price: ${(currentPrice - priceDrop).toLocaleString()}
-            </span>
+            <span>Next price: ${(currentPrice - priceDrop).toLocaleString()}</span>
           </div>
         )}
       </div>

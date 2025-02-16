@@ -3,25 +3,25 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Settings } from 'lucide-react';
-import { useAuth } from "@/contexts/auth-context"
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import type React from "react" // Added import for React
+import { useAuth } from '@/contexts/auth-context';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import type React from 'react'; // Added import for React
 
 export default function Header() {
-  const pathname = usePathname();
-  const router = useRouter()
-  const { user, logout } = useAuth()
+  const _pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     if (!user) {
-      router.push("/")
+      router.push('/');
     }
-  }, [user, router])
+  }, [user, router]);
 
   if (!user) {
-    return null
+    return null;
   }
 
   return (
@@ -37,20 +37,18 @@ export default function Header() {
           <Button
             variant="ghost"
             onClick={() => {
-              logout()
-              router.push("/")
+              logout();
+              router.push('/');
             }}
-            >
+          >
             Logout
           </Button>
-        <Link href="/settings" className="flex items-center space-x-2 mr-6">
-          <Settings className="h-5 w-5" />
-          <span className="text-sm font-medium">Settings</span>
-        </Link>
+          <Link href="/settings" className="flex items-center space-x-2 mr-6">
+            <Settings className="h-5 w-5" />
+            <span className="text-sm font-medium">Settings</span>
+          </Link>
         </div>
       </div>
     </header>
   );
 }
-
-

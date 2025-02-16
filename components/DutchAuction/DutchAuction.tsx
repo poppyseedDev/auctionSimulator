@@ -1,13 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PriceHistoryChart } from '@/components/PriceHistoryChart';
 import { BidHistory, Bid } from '@/components/BidHistory';
@@ -19,10 +13,10 @@ import { User } from '@/contexts/auth-context';
 import { AuctionTimer } from '../generalAuction/AuctionTimer';
 import { useCountdown } from '@/hooks/use-countdown';
 import { Button } from '../ui/button';
-import { 
-  calculateLinearPrice, 
-  calculateExponentialPrice, 
-  calculateCustomPrice 
+import {
+  calculateLinearPrice,
+  calculateExponentialPrice,
+  calculateCustomPrice,
 } from '@/lib/price-calculator';
 
 interface PricePoint {
@@ -30,40 +24,38 @@ interface PricePoint {
   price: number;
 }
 
-export default function DutchAuction({ settings, user }: { settings: Settings, user: User }) {
+export default function DutchAuction({ settings, user }: { settings: Settings; user: User }) {
   const AUCTION_DURATION = settings.totalTime * 60 * 1000;
-  const PRICE_DROP = settings.priceDrop
-  const INTERVAL = settings.interval
-  const WHEN_TO_SHOW_TOKENS_INTERVAL = settings.intervalWhenToShowTokens
-  const MIN_PRICE = settings.minPrice
-  const INITIAL_PRICE = settings.initialPrice
-  const INITIAL_TOKENS = settings.initialTokens
+  const PRICE_DROP = settings.priceDrop;
+  const INTERVAL = settings.interval;
+  const WHEN_TO_SHOW_TOKENS_INTERVAL = settings.intervalWhenToShowTokens;
+  const MIN_PRICE = settings.minPrice;
+  const INITIAL_PRICE = settings.initialPrice;
+  const INITIAL_TOKENS = settings.initialTokens;
   const SEALED_BID = settings.sealedBid;
   const TOTAL_TOKENS = settings.initialTokens;
 
-  const [currentPrice, setCurrentPrice] = useState(settings.initialPrice)
-  const [timeUntilDrop, setTimeUntilDrop] = useState(settings.interval)
-  const [timeUntilShowTokens, setTimeUntilShowTokens] = useState(settings.intervalWhenToShowTokens)
-  const [progress, setProgress] = useState(100)
-  const [progressTokenReveal, setProgressTokenReveal] = useState(100)
-  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([{ time: 0, price: settings.initialPrice }])
-  const [elapsedTime, setElapsedTime] = useState(0)
-  const [availableTokens, setAvailableTokens] = useState(settings.initialTokens)
-  const [sealedAvailableTokens, setSealedAvailableTokens] = useState<
-    string | number
-  >(settings.initialTokens);
+  const [currentPrice, setCurrentPrice] = useState(settings.initialPrice);
+  const [timeUntilDrop, setTimeUntilDrop] = useState(settings.interval);
+  const [timeUntilShowTokens, setTimeUntilShowTokens] = useState(settings.intervalWhenToShowTokens);
+  const [progress, setProgress] = useState(100);
+  const [progressTokenReveal, setProgressTokenReveal] = useState(100);
+  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([
+    { time: 0, price: settings.initialPrice },
+  ]);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [availableTokens, setAvailableTokens] = useState(settings.initialTokens);
+  const [sealedAvailableTokens, setSealedAvailableTokens] = useState<string | number>(
+    settings.initialTokens
+  );
   const [bids, setBids] = useState<Bid[]>([]);
   const [bidAmount, setBidAmount] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [endTime] = useState(
-    () => new Date(new Date().getTime() + AUCTION_DURATION)
-  );
+  const [endTime] = useState(() => new Date(new Date().getTime() + AUCTION_DURATION));
   const timeLeft = useCountdown(endTime);
 
   // Add this new state to track the next price drop time
-  const [nextDropTime] = useState(
-    () => new Date(new Date().getTime() + INTERVAL * 1000)
-  );
+  const [nextDropTime] = useState(() => new Date(new Date().getTime() + INTERVAL * 1000));
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -121,9 +113,9 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
             setSealedAvailableTokens(availableTokens);
             return WHEN_TO_SHOW_TOKENS_INTERVAL;
           }
-        //   if (SEALED_BID && prev === WHEN_TO_SHOW_TOKENS_INTERVAL - 1) {
-        //     setSealedAvailableTokens('??');
-        //   }
+          //   if (SEALED_BID && prev === WHEN_TO_SHOW_TOKENS_INTERVAL - 1) {
+          //     setSealedAvailableTokens('??');
+          //   }
           return prev - 1;
         });
 
@@ -147,7 +139,21 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
       clearInterval(timer);
       clearInterval(elapsedTimer);
     };
-  }, [currentPrice, elapsedTime, availableTokens, SEALED_BID, timeLeft.isExpired, nextDropTime]);
+  }, [
+    currentPrice,
+    elapsedTime,
+    availableTokens,
+    SEALED_BID,
+    timeLeft.isExpired,
+    nextDropTime,
+    INITIAL_PRICE,
+    INTERVAL,
+    MIN_PRICE,
+    WHEN_TO_SHOW_TOKENS_INTERVAL,
+    settings.customSlopes,
+    settings.priceFunction,
+    settings.totalTime,
+  ]);
 
   const handleBid = () => {
     const tokens = Number(bidAmount);
@@ -168,7 +174,12 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
     if (SEALED_BID) {
       setSealedAvailableTokens('??');
     } else {
-      setSealedAvailableTokens((prev) => prev - tokens);
+      setSealedAvailableTokens((prev) => {
+        if (typeof prev === 'number') {
+          return prev - tokens;
+        }
+        return prev;
+      });
     }
     setBidAmount('');
     setIsDialogOpen(false);
@@ -179,7 +190,10 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
       <Card className="w-full max-w-4xl">
         <CardHeader>
           <CardTitle className="text-2xl text-center">
-            <span>{settings.auctionType.toUpperCase()} Auction Simulator - {TOTAL_TOKENS} Tokens Available</span>
+            <span>
+              {settings.auctionType.toUpperCase()} Auction Simulator - {TOTAL_TOKENS} Tokens
+              Available
+            </span>
 
             {timeLeft.isExpired && (
               <div className="mt-2">
@@ -191,7 +205,7 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-            <AuctionTimer {...timeLeft} />
+          <AuctionTimer {...timeLeft} />
 
           <AuctionStats
             availableTokens={sealedAvailableTokens}
@@ -211,15 +225,15 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
             <Progress value={progress} className="h-2" />
           </div>
 
-          {(settings.sealedBid === true) && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Next token amount reveal:</span>
-              <span>{timeUntilShowTokens}s</span>
+          {settings.sealedBid === true && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Next token amount reveal:</span>
+                <span>{timeUntilShowTokens}s</span>
+              </div>
+              <Progress value={progressTokenReveal} className="h-2" />
             </div>
-            <Progress value={progressTokenReveal} className="h-2" />
-          </div>
-          )}  
+          )}
 
           {(currentPrice <= MIN_PRICE || availableTokens === 0) && (
             <div className="text-center text-sm text-muted-foreground bg-muted p-2 rounded-md">
@@ -230,12 +244,14 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
           )}
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
-            <div className="flex justify-center gap-4">
-              <Button onClick={() => setIsDialogOpen(true)} disabled={currentPrice <= MIN_PRICE || availableTokens === 0}>
-                Bid Now
-              </Button>
-            </div>
-
+          <div className="flex justify-center gap-4">
+            <Button
+              onClick={() => setIsDialogOpen(true)}
+              disabled={currentPrice <= MIN_PRICE || availableTokens === 0}
+            >
+              Bid Now
+            </Button>
+          </div>
         </CardFooter>
       </Card>
 
@@ -255,7 +271,7 @@ export default function DutchAuction({ settings, user }: { settings: Settings, u
         initialPrice={INITIAL_PRICE}
         formatTime={formatTime}
       />
-      <BidHistory bids={bids} />
+      <BidHistory user={user} bids={bids} />
     </div>
   );
 }

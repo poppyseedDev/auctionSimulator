@@ -67,8 +67,7 @@ export function BidDialogSealedBid({
           </div>
           {bidAmount && bidPrice && (
             <div className="text-sm text-muted-foreground">
-              Total bid: $
-              {(Number(bidAmount) * Number(bidPrice)).toLocaleString()}
+              Total bid: ${(Number(bidAmount) * Number(bidPrice)).toLocaleString()}
             </div>
           )}
         </div>

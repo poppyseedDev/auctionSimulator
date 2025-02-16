@@ -36,10 +36,7 @@ export function PriceHistoryChart({
             }}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={priceHistory}
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-              >
+              <LineChart data={priceHistory} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                 <XAxis
                   dataKey="time"
                   tickFormatter={formatTime}

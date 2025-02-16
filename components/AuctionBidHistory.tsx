@@ -9,12 +9,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export interface Bid {
-  bidder: string;
   amount: number;
   tokens: number;
+  timestamp: Date;
+  bidder: string;
   totalValue: number;
-  isWinning: boolean;
-  tokensWon: number;
+  isWinning?: boolean;
+  tokensWon?: number;
   finalPayment?: number;
 }
 
@@ -45,18 +46,11 @@ export function AuctionBidHistory({ bids }: BidHistoryProps) {
               </TableHeader>
               <TableBody>
                 {bids.map((bid, index) => (
-                  <TableRow
-                    key={index}
-                    className={bid.isWinning ? 'bg-green-50' : undefined}
-                  >
+                  <TableRow key={index} className={bid.isWinning ? 'bg-green-50' : undefined}>
                     <TableCell className="font-medium">{bid.bidder}</TableCell>
-                    <TableCell className="text-right">
-                      ${bid.amount.toFixed(2)}
-                    </TableCell>
+                    <TableCell className="text-right">${bid.amount.toFixed(2)}</TableCell>
                     <TableCell className="text-right">{bid.tokens}</TableCell>
-                    <TableCell className="text-right">
-                      ${bid.totalValue.toFixed(2)}
-                    </TableCell>
+                    <TableCell className="text-right">${bid.totalValue.toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       {bid.isWinning ? (
                         <span className="text-green-600">Winning</span>
@@ -64,9 +58,7 @@ export function AuctionBidHistory({ bids }: BidHistoryProps) {
                         <span className="text-red-600">Not Winning</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-right">
-                      {bid.tokensWon}
-                    </TableCell>
+                    <TableCell className="text-right">{bid.tokensWon}</TableCell>
                     <TableCell className="text-right">
                       ${(bid.finalPayment || 0).toFixed(2)}
                     </TableCell>

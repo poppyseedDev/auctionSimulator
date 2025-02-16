@@ -5,14 +5,9 @@ import DutchAuction from '@/components/DutchAuction/DutchAuction';
 import ReverseAuction from '@/components/ReverseAuction/ReverseAuction';
 import { useAuth } from '@/contexts/auth-context';
 
-interface PricePoint {
-  time: number;
-  price: number;
-}
-
 export default function Page() {
-  const { settings } = useSettings()
-  const { user } = useAuth()
+  const { settings } = useSettings();
+  const { user } = useAuth();
 
   if (!user) {
     return (
@@ -22,17 +17,15 @@ export default function Page() {
           <p className="text-gray-600">You need to be registered to access the auction</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div>
-      {settings.auctionType.includes('dutch') && 
-        <DutchAuction settings={settings} user={user} />
-      }
-      {settings.auctionType.includes('reverse') &&
+      {settings.auctionType.includes('dutch') && <DutchAuction settings={settings} user={user} />}
+      {settings.auctionType.includes('reverse') && (
         <ReverseAuction settings={settings} user={user} />
-      }
+      )}
     </div>
-  )
+  );
 }

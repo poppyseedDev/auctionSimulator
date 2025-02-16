@@ -35,8 +35,7 @@ export function BidDialog({
         <DialogHeader>
           <DialogTitle>Place Your Bid</DialogTitle>
           <DialogDescription>
-            Current price is ${currentPrice} per token. Available tokens:{' '}
-            {availableTokens}
+            Current price is ${currentPrice} per token. Available tokens: {availableTokens}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

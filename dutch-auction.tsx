@@ -5,13 +5,7 @@ import { ArrowDown, Pause, Play, RotateCcw } from 'lucide-react';
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
 
@@ -25,9 +19,7 @@ export default function DutchAuction() {
   const [isRunning, setIsRunning] = useState(false);
   const [timeUntilDrop, setTimeUntilDrop] = useState(10);
   const [progress, setProgress] = useState(100);
-  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([
-    { time: 0, price: 1000 },
-  ]);
+  const [priceHistory, setPriceHistory] = useState<PricePoint[]>([{ time: 0, price: 1000 }]);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const PRICE_DROP = 50; // Amount to decrease price by
@@ -98,9 +90,7 @@ export default function DutchAuction() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
-            Dutch Auction Simulator
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">Dutch Auction Simulator</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="text-center space-y-2">
@@ -115,9 +105,7 @@ export default function DutchAuction() {
             {currentPrice > MIN_PRICE && (
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <ArrowDown className="h-4 w-4" />
-                <span>
-                  Next price: ${(currentPrice - PRICE_DROP).toLocaleString()}
-                </span>
+                <span>Next price: ${(currentPrice - PRICE_DROP).toLocaleString()}</span>
               </div>
             )}
           </div>
@@ -198,11 +186,7 @@ export default function DutchAuction() {
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
           <Button onClick={toggleAuction} disabled={currentPrice <= MIN_PRICE}>
-            {isRunning ? (
-              <Pause className="h-4 w-4 mr-2" />
-            ) : (
-              <Play className="h-4 w-4 mr-2" />
-            )}
+            {isRunning ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
             {isRunning ? 'Pause' : 'Start'}
           </Button>
           <Button variant="outline" onClick={resetAuction}>

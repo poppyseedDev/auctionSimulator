@@ -3,10 +3,7 @@ interface AuctionStatsProps {
   initialTokens: number;
 }
 
-export function AuctionSealedBidStats({
-  availableTokens,
-  initialTokens,
-}: AuctionStatsProps) {
+export function AuctionSealedBidStats({ availableTokens, initialTokens }: AuctionStatsProps) {
   return (
     <div className="flex justify-around items-center">
       <div className="text-center space-y-2">

@@ -5,13 +5,7 @@ import Link from 'next/link';
 import type React from 'react'; // Added import for React
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSettings } from '@/contexts/settigns-context';
@@ -32,25 +26,23 @@ export default function Settings() {
   const calculatePriceDrop = () => {
     const totalIntervals = (settings.totalTime * 60) / settings.interval;
     if (totalIntervals === 0) return 0;
-    
+
     const priceDrop = (settings.initialPrice - settings.minPrice) / totalIntervals;
     return isFinite(priceDrop) ? Number(priceDrop.toFixed(2)) : 0;
   };
 
-  const handleChange =
-    (key: keyof typeof settings) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = Number.parseInt(e.target.value, 10);
-      if (!isNaN(value) && value > 0) {
-        updateSettings({ [key]: value });
-      }
-    };
+  const handleChange = (key: keyof typeof settings) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number.parseInt(e.target.value, 10);
+    if (!isNaN(value) && value > 0) {
+      updateSettings({ [key]: value });
+    }
+  };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const auctionType = e.target.value;
     updateSettings({
       auctionType,
-      sealedBid: auctionType.includes('sealed')
+      sealedBid: auctionType.includes('sealed'),
     });
   };
 
@@ -85,12 +77,7 @@ export default function Settings() {
           break;
         case 'linear':
         default:
-          price = calculateLinearPrice(
-            settings.initialPrice,
-            settings.minPrice,
-            i,
-            totalIntervals
-          );
+          price = calculateLinearPrice(settings.initialPrice, settings.minPrice, i, totalIntervals);
       }
       // Convert interval to minutes
       const timeInMinutes = (i * settings.interval) / 60;
@@ -113,22 +100,17 @@ export default function Settings() {
         <Label>Price Decay Preview</Label>
         <div className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={generatePreviewData()} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-              <XAxis 
-                dataKey="time" 
-                label={{ value: 'Time (minutes)', position: 'bottom' }}
-              />
-              <YAxis 
+            <LineChart
+              data={generatePreviewData()}
+              margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+            >
+              <XAxis dataKey="time" label={{ value: 'Time (minutes)', position: 'bottom' }} />
+              <YAxis
                 domain={[settings.minPrice, settings.initialPrice]}
                 label={{ value: 'Price ($)', angle: -90, position: 'left' }}
               />
               <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="price" 
-                stroke="#2563eb" 
-                dot={false}
-              />
+              <Line type="monotone" dataKey="price" stroke="#2563eb" dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -143,9 +125,7 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <CardTitle className="text-2xl">Auction Settings</CardTitle>
-              <CardDescription>
-                Configure the parameters for your Dutch auction
-              </CardDescription>
+              <CardDescription>Configure the parameters for your Dutch auction</CardDescription>
             </div>
             <Link href="/auction">
               <Button variant="ghost" size="icon">
@@ -165,13 +145,9 @@ export default function Settings() {
                 onChange={handleSelectChange}
               >
                 <option value="dutch">Dutch Auction</option>
-                <option value="dutch-sealed">
-                  Dutch Auction with Sealed Bids
-                </option>
+                <option value="dutch-sealed">Dutch Auction with Sealed Bids</option>
                 <option value="reverse">Reverse Auction</option>
-                <option value="reverse-sealed">
-                  Sealed Bid Reverse Auction
-                </option>
+                <option value="reverse-sealed">Sealed Bid Reverse Auction</option>
               </select>
               <p className="text-sm text-muted-foreground">
                 Select the type of auction you want to run
@@ -199,7 +175,7 @@ export default function Settings() {
                 {renderPricePreview()}
               </div>
             )}
-            
+
             {settings.priceFunction === 'custom' && (
               <div className="grid gap-2">
                 <Label>Price Slopes ($ per interval)</Label>
@@ -234,23 +210,20 @@ export default function Settings() {
 
             <Separator />
 
-              <>
-                <div className="grid gap-2">
-                  <Label htmlFor="initialPrice">Initial Price ($)</Label>
-                  <Input
-                    id="initialPrice"
-                    type="number"
-                    value={settings.initialPrice}
-                    onChange={handleChange('initialPrice')}
-                    min={settings.minPrice}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    The starting price of the auction
-                  </p>
-                </div>
+            <>
+              <div className="grid gap-2">
+                <Label htmlFor="initialPrice">Initial Price ($)</Label>
+                <Input
+                  id="initialPrice"
+                  type="number"
+                  value={settings.initialPrice}
+                  onChange={handleChange('initialPrice')}
+                  min={settings.minPrice}
+                />
+                <p className="text-sm text-muted-foreground">The starting price of the auction</p>
+              </div>
 
-                {(settings.auctionType === 'dutch' ||
-              settings.auctionType === 'dutch-sealed') && (
+              {(settings.auctionType === 'dutch' || settings.auctionType === 'dutch-sealed') && (
                 <div className="grid gap-2">
                   <Label htmlFor="minPrice">Minimum Price ($)</Label>
                   <Input
@@ -267,25 +240,25 @@ export default function Settings() {
                 </div>
               )}
 
-                <Separator />
+              <Separator />
 
-                <div className="grid gap-2">
-                  <Label htmlFor="totalTime">Total Auction Time (minutes)</Label>
-                  <Input
-                    id="totalTime"
-                    type="number"
-                    value={settings.totalTime}
-                    onChange={handleChange('totalTime')}
-                    min={1}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Total duration of the auction
-                  </p>
-                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="totalTime">Total Auction Time (minutes)</Label>
+                <Input
+                  id="totalTime"
+                  type="number"
+                  value={settings.totalTime}
+                  onChange={handleChange('totalTime')}
+                  min={1}
+                />
+                <p className="text-sm text-muted-foreground">Total duration of the auction</p>
+              </div>
 
-                {(settings.auctionType === 'dutch-sealed') && (
+              {settings.auctionType === 'dutch-sealed' && (
                 <div className="grid gap-2">
-                  <Label htmlFor="interval">Time interval showing token amount left (seconds)</Label>
+                  <Label htmlFor="interval">
+                    Time interval showing token amount left (seconds)
+                  </Label>
                   <Input
                     id="intervalWhenToShowTokens"
                     type="number"
@@ -297,49 +270,49 @@ export default function Settings() {
                     Time interval between showing amount of tokens left.
                   </p>
                 </div>
-                )}
+              )}
 
-                {(settings.auctionType === 'dutch' ||
-              settings.auctionType === 'dutch-sealed') && (
+              {(settings.auctionType === 'dutch' || settings.auctionType === 'dutch-sealed') && (
                 <>
-                <div className="grid gap-2">
-                  <Label htmlFor="interval">Time Interval (seconds)</Label>
-                  <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
-                    {settings.interval} sec
+                  <div className="grid gap-2">
+                    <Label htmlFor="interval">Time Interval (seconds)</Label>
+                    <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+                      {settings.interval} sec
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Time interval between drops. This is fixed to 12 seconds, since it mimics the
+                      ethereum block production.
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Time interval between drops. This is fixed to 12 seconds, since it mimics the ethereum block production.
-                  </p>
-                </div>
 
-                <div className="grid gap-2">
-                  <Label>Price Drop per Interval</Label>
-                  <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
-                    ${calculatePriceDrop()}
+                  <div className="grid gap-2">
+                    <Label>Price Drop per Interval</Label>
+                    <div className="flex h-10 w-full items-center rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+                      ${calculatePriceDrop()}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Amount the price will decrease every {settings.interval} seconds
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Amount the price will decrease every {settings.interval} seconds
-                  </p>
-                </div>
                 </>
               )}
 
-                <Separator />
+              <Separator />
 
-                <div className="grid gap-2">
-                  <Label htmlFor="initialTokens">Initial Token Supply</Label>
-                  <Input
-                    id="initialTokens"
-                    type="number"
-                    value={settings.initialTokens}
-                    onChange={handleChange('initialTokens')}
-                    min={1}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Total number of tokens available at auction start
-                  </p>
-                </div>
-              </>
+              <div className="grid gap-2">
+                <Label htmlFor="initialTokens">Initial Token Supply</Label>
+                <Input
+                  id="initialTokens"
+                  type="number"
+                  value={settings.initialTokens}
+                  onChange={handleChange('initialTokens')}
+                  min={1}
+                />
+                <p className="text-sm text-muted-foreground">
+                  Total number of tokens available at auction start
+                </p>
+              </div>
+            </>
           </div>
 
           <div className="flex justify-end space-x-4">

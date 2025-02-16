@@ -15,14 +15,9 @@ export interface AuctionResult {
   allBids: Bid[];
 }
 
-export function calculateAuctionResults(
-  bids: Bid[],
-  totalTokens: number
-): AuctionResult {
+export function calculateAuctionResults(bids: Bid[], totalTokens: number): AuctionResult {
   // Sort bids by price (highest to lowest)
-  const sortedBids = [...bids].sort(
-    (a, b) => b.pricePerToken - a.pricePerToken
-  );
+  const sortedBids = [...bids].sort((a, b) => b.pricePerToken - a.pricePerToken);
 
   let tokensAllocated = 0;
   let clearingPrice = 0;

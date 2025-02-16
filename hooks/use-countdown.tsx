@@ -39,9 +39,7 @@ const calculateTimeLeft = (targetDate: Date): TimeLeft => {
 };
 
 export function useCountdown(targetDate: Date): TimeLeft {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
-    calculateTimeLeft(targetDate)
-  );
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calculateTimeLeft(targetDate));
 
   useEffect(() => {
     // Update every second

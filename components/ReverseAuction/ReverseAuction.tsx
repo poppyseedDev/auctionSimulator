@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCountdown } from '@/hooks/use-countdown';
 import { AuctionBidHistory } from '@/components/AuctionBidHistory';
@@ -15,15 +14,12 @@ import { AuctionTimer } from '../generalAuction/AuctionTimer';
 import { AuctionEndAlert } from './AuctionEndAlert';
 import { BidDialog } from './BidDialog';
 
-
-export default function ReverseAuction({ settings, user }: { settings: Settings, user: User}) {
+export default function ReverseAuction({ settings, user }: { settings: Settings; user: User }) {
   const TOTAL_TOKENS = settings.initialTokens;
   const AUCTION_DURATION = settings.totalTime * 60 * 1000;
   const SEALED_BID = settings.sealedBid;
 
-  const [endTime] = useState(
-    () => new Date(new Date().getTime() + AUCTION_DURATION)
-  );
+  const [endTime] = useState(() => new Date(new Date().getTime() + AUCTION_DURATION));
   const timeLeft = useCountdown(endTime);
 
   const [bids, setBids] = useState<Bid[]>([]);
@@ -33,44 +29,40 @@ export default function ReverseAuction({ settings, user }: { settings: Settings,
   const bidder = user.name;
 
   // Calculate winning bids, remaining tokens, and clearing price
-  const { processedBids, remainingTokens, clearingPrice, totalProceeds } =
-    useMemo(() => {
-      // Sort bids by price per token (highest first)
-      const sortedBids = [...bids].sort((a, b) => b.amount - a.amount);
-      let remainingTokens = TOTAL_TOKENS;
-      let clearingPrice = settings.initialPrice;
+  const { processedBids, remainingTokens, clearingPrice, totalProceeds } = useMemo(() => {
+    // Sort bids by price per token (highest first)
+    const sortedBids = [...bids].sort((a, b) => b.amount - a.amount);
+    let remainingTokens = TOTAL_TOKENS;
+    let clearingPrice = settings.initialPrice;
 
-      const processed = sortedBids.map((bid) => {
-        const tokensWon = Math.min(bid.tokens, remainingTokens);
-        const isWinning = tokensWon > 0;
+    const processed = sortedBids.map((bid) => {
+      const tokensWon = Math.min(bid.tokens, remainingTokens);
+      const isWinning = tokensWon > 0;
 
-        if (isWinning) {
-          remainingTokens -= tokensWon;
-          if (remainingTokens === 0) {
-            clearingPrice = bid.amount; // This will end up being the lowest winning bid
-          }
+      if (isWinning) {
+        remainingTokens -= tokensWon;
+        if (remainingTokens === 0) {
+          clearingPrice = bid.amount; // This will end up being the lowest winning bid
         }
-
-        return {
-          ...bid,
-          isWinning,
-          tokensWon: isWinning ? tokensWon : 0,
-          finalPayment: isWinning ? tokensWon * clearingPrice : 0,
-        };
-      });
-
-      const totalProceeds = processed.reduce(
-        (sum, bid) => sum + (bid.finalPayment || 0),
-        0
-      );
+      }
 
       return {
-        processedBids: processed,
-        remainingTokens,
-        clearingPrice,
-        totalProceeds,
+        ...bid,
+        isWinning,
+        tokensWon: isWinning ? tokensWon : 0,
+        finalPayment: isWinning ? tokensWon * clearingPrice : 0,
       };
-    }, [bids]);
+    });
+
+    const totalProceeds = processed.reduce((sum, bid) => sum + (bid.finalPayment || 0), 0);
+
+    return {
+      processedBids: processed,
+      remainingTokens,
+      clearingPrice,
+      totalProceeds,
+    };
+  }, [TOTAL_TOKENS, settings.initialPrice, bids]);
 
   const handleBidConfirm = useCallback(
     (tokens: string, price: string) => {
@@ -121,25 +113,30 @@ export default function ReverseAuction({ settings, user }: { settings: Settings,
           </CardTitle>
         </CardHeader>
         <CardContent className=" ">
-            <div className="space-y-4 col-span-2 md:col-span-1">
-              <AuctionTimer {...timeLeft} />
+          <div className="space-y-4 col-span-2 md:col-span-1">
+            <AuctionTimer {...timeLeft} />
 
-              {(timeLeft.isExpired || !SEALED_BID) && (
-                <AuctionStats remainingTokens={remainingTokens} clearingPrice={clearingPrice} />
-              )}
+            {(timeLeft.isExpired || !SEALED_BID) && (
+              <AuctionStats remainingTokens={remainingTokens} clearingPrice={clearingPrice} />
+            )}
 
-              {timeLeft.isExpired ? (
-                <AuctionEndAlert totalTokens={TOTAL_TOKENS} remainingTokens={remainingTokens} clearingPrice={clearingPrice} totalProceeds={totalProceeds} />
-              ) : (
-                <Button
-                  onClick={() => setIsDialogOpen(true)}
-                  disabled={timeLeft.isExpired}
-                  className="w-full"
-                >
-                  Place Bid
-                </Button>
-              )}
-            </div>
+            {timeLeft.isExpired ? (
+              <AuctionEndAlert
+                totalTokens={TOTAL_TOKENS}
+                remainingTokens={remainingTokens}
+                clearingPrice={clearingPrice}
+                totalProceeds={totalProceeds}
+              />
+            ) : (
+              <Button
+                onClick={() => setIsDialogOpen(true)}
+                disabled={timeLeft.isExpired}
+                className="w-full"
+              >
+                Place Bid
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
       <BidDialog
