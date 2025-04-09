@@ -146,8 +146,8 @@ export default function Settings() {
               >
                 <option value="dutch">Dutch Auction</option>
                 <option value="dutch-sealed">Dutch Auction with Sealed Bids</option>
-                <option value="reverse">Reverse Auction</option>
-                <option value="reverse-sealed">Sealed Bid Reverse Auction</option>
+                <option value="reverse">English Auction</option>
+                <option value="reverse-sealed">Sealed Bid Auction</option>
               </select>
               <p className="text-sm text-muted-foreground">
                 Select the type of auction you want to run
